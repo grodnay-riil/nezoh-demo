@@ -1,0 +1,4 @@
+topics:
+ - name: "/chatter"
+   compress: false # enable bz2 compression
+   rate: 1.0 # rate limit at 1Hz

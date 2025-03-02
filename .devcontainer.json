@@ -1,0 +1,8 @@
+{
+  "name": "Zenoh test",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "ros_dev",
+  "runServices": "ros_dev",
+  "workspaceFolder": "/home/ubuntu/Zenoh-demo",
+  "shutdownAction": "stopCompose"
+}

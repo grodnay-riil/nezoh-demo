@@ -1,0 +1,53 @@
+
+# Common configuration for all services
+# Define networks first
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+
+x-common: &common
+  build:
+    context: .
+    args:
+      PROJECT_NAME: ${PROJECT_NAME}
+      PROJECT_USER: ${PROJECT_USER}
+      PROJECT_UID: ${PROJECT_UID}
+      PROJECT_GID: ${PROJECT_GID}
+  user: "${PROJECT_UID}:${PROJECT_GID}"
+  volumes:
+    - .:/home/${PROJECT_USER}/${PROJECT_NAME}
+    - .vscode:/home/${PROJECT_USER}/.vscode-server  
+services:
+  ros_publisher:
+    <<: *common
+    container_name: ${PROJECT_NAME}-ros_publisher
+    tty: true  # Keep the container open for interaction
+    stdin_open: true
+    hostname: ros-publisher        # Set hostname
+    networks:
+      custom_net:
+        ipv4_address: 172.18.0.2 
+    command: bash -c "source ~/${PROJECT_NAME}/devel/setup.bash && roslaunch sub_pub publisher.launch"
+  ros_subscriber:
+    <<: *common
+    container_name: ${PROJECT_NAME}-ros_subscriber
+    tty: true  # Keep the container open for interaction
+    stdin_open: true
+    hostname: ros-subscriber       # Set hostname
+    networks:
+      custom_net:
+        ipv4_address: 172.18.0.3   # Set static I
+    command: bash -c "source ~/${PROJECT_NAME}/devel/setup.bash && roslaunch sub_pub subscriber.launch"
+  ros_dev:
+    <<: *common
+    container_name: ${PROJECT_NAME}-ros_dev
+    command: /bin/bash  # Start with an interactive shell for development
+    tty: true  # Keep the container open for interaction
+    stdin_open: true
+    hostname: ros-dev              # Set hostname
+    networks:
+      custom_net:
+        ipv4_address: 172.18.0.4   # Set static IP
