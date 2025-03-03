@@ -17,12 +17,18 @@ x-common: &common
       PROJECT_UID: ${PROJECT_UID}
       PROJECT_GID: ${PROJECT_GID}
   user: "${PROJECT_UID}:${PROJECT_GID}"
+  environment:
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - CYCLONEDDS_URI=file:////home/${PROJECT_USER}/${PROJECT_NAME}/cyclonedds.xml
+      - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
   volumes:
     - .:/home/${PROJECT_USER}/${PROJECT_NAME}
     - .vscode:/home/${PROJECT_USER}/.vscode-server  
 services:
   ros_publisher:
     <<: *common
+    environment:
+      - ROS_DOMAIN_ID=1
     container_name: ${PROJECT_NAME}-ros_publisher
     tty: true  # Keep the container open for interaction
     stdin_open: true
@@ -30,9 +36,11 @@ services:
     networks:
       custom_net:
         ipv4_address: 172.18.0.2 
-    command: bash -c "source ~/${PROJECT_NAME}/devel/setup.bash && roslaunch sub_pub publisher.launch"
+    command: bash -c "source ~/${PROJECT_NAME}/install/setup.bash && ros2 launch sub_pub publisher.launch.py "
   ros_subscriber:
     <<: *common
+    environment:
+      - ROS_DOMAIN_ID=2
     container_name: ${PROJECT_NAME}-ros_subscriber
     tty: true  # Keep the container open for interaction
     stdin_open: true
@@ -40,7 +48,7 @@ services:
     networks:
       custom_net:
         ipv4_address: 172.18.0.3   # Set static I
-    command: bash -c "source ~/${PROJECT_NAME}/devel/setup.bash && roslaunch sub_pub subscriber.launch"
+    command: bash -c "source ~/${PROJECT_NAME}/install/setup.bash && ros2 launch sub_pub subscriber.launch.py "
   ros_dev:
     <<: *common
     container_name: ${PROJECT_NAME}-ros_dev

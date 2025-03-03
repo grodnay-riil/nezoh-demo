@@ -29,12 +29,12 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     nload       
     # && rm -rf /var/lib/apt/lists/*
-
+RUN apt install -y ros-jazzy-rmw-cyclonedds-cpp
 # # Create a new user and group with matching UID and GID
 # RUN groupadd -g $PROJECT_GID $PROJECT_USER && \
 #     useradd -m -u $PROJECT_UID -g $PROJECT_GID -s /bin/bash $PROJECT_USER && \
 #     usermod -aG sudo $PROJECT_USER
-
+# RUN ip l set lo multicast on
 # Allow the new user to use sudo without a password
 RUN echo "$PROJECT_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
@@ -68,6 +68,5 @@ RUN echo "source /home/$PROJECT_USER/$PROJECT_NAME/install/setup.bash" >> /home/
 
 # Expose ROS 2 and Zenoh ports
 EXPOSE 7447 7448 1883
-
 # Start with a bash terminal
 CMD ["bash"]
