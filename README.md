@@ -1,7 +1,7 @@
 
-# Nimbro-Demo ROS Project
+# Zeno-Demo ROS Project
 
-This repository contains a generic and flexible setup for working with ROS projects using Docker. It ensures that all builds and executions happen inside containers with user permissions matched to your host system. The setup includes scripts for building, running, and interacting with containers seamlessly.
+This repository contains a ros2 zeno bridge demo. Two isolated containerds with ros two are set up. Between them a Zenoh bridge forwardes a topic with 1Hz pacing. The set up is a generic and flexible setup for working with ROS projects using Docker. It ensures that all builds and executions happen inside containers with user permissions matched to your host system. The setup includes scripts for building, running, and interacting with containers seamlessly. (Running - tobe completed, see the Nimbro-demo, Also, the base container include user 1000:1000 so this step is skipped)
 
 ---
 
@@ -12,11 +12,9 @@ This repository contains a generic and flexible setup for working with ROS proje
 1. **Clone the Repository:**
 
    ```bash
-   git clone --recursive https://github.com/grodnay-riil/nimbro-demo.git
-   cd nimbro-demo
+   git clone  https://github.com/grodnay-riil/zenoh-demo.git
+   cd zenoh-demo
    ```
-
-   > **Note:** The `--recursive` flag pulls all submodules automatically.
 
 ---
 
@@ -55,87 +53,78 @@ This repository contains a generic and flexible setup for working with ROS proje
    This script:
    - Builds Docker images with user permissions matching your host.
    - Runs `rosdep` to install missing ROS dependencies.
-   - Compiles the ROS workspace using `catkin build`.
-
-   **Key Features:**
-   - Uses your **UID and GID** to avoid permission issues.
-   - Creates a container user based on your **project name** for better identification.
+   - Compiles the ROS workspace using `colcon build --symlink-install`. **This step is skipped
 
 ---
 
-4. **Run the Containers with `run.bash`:**
+4. **Run the development Containers and build the sub pub package**
 
    Run:
 
    ```bash
-   run.bash
+   run_dev.bash
+   colcon build --symilink-install
    ```
 
-   This script:
-   - Launches containers for ROS nodes (e.g., publisher, subscriber).
+   This:
+   - Launches the development container.
    - Maps your workspace into the containers.
+   - Builds the code
 
 ---
-
-5. **Access a Running Container with `join.bash`:**
-
-   Run:
-
+4. **Run publisher**
+   Open another window, run:
    ```bash
-   join.bash
+   source scripts/setup.bash
+   docker compose run ros_publisher
+   ```
+   This:
+      - Launches the publisher container.
+      - launches the publisher
+   You should see the pulisher log sending 10 messages per second
+   4. **Run subscriber**
+Open another window, run:
+   ```bash
+   source scripts/setup.bash
+   docker compose run ros_subscriber
+
+   ```
+   This:
+      - Launches the subscriber container.
+      - launches the subscriber
+   We have no bridge, so you should see the subscriber waiting
+
+4. **Run Zeno Bridge**
+   Open another window under publisher, run:
+   ```bash
+   docker exec -it zenoh-demo-ros_publisher-run- <TAB><TAB> bash
+   zenoh-bridge-ros2dds -c zenoh_pub.config.json5
+   ```
+   And in another window:
+   ```bash
+   docker exec -it zenoh-demo-ros_subscriber-run- <TAB><TAB> bash
+   zenoh-bridge-ros2dds -c zenoh_sub.config.json5
+   ```
+   This:
+      - runs Zenoh bridge with relevent configuration in subscriber and publisher containers
+      - as we user "run" with docker compose our containers have temporary names.
+      - You shoud see the subscriber accept 1 message per second.
+
+5. Play around:
+   - by changin the Zenoh config files and reluanching Zenoh.
+   - You can check trouhput by connecting to one of the subscriber or publisher containers  anr runnig:
+   ```bash
+   nload
    ```
 
-   **What this does:**
-   - Opens an interactive bash shell inside the `ros_build` container.
-   - The prompt reflects your **project-based username**.
+6. **Stop All Containers with `kill_all.bash`:**
 
----
-
-6. **Stop All Containers with `kill.bash`:**
-
-   Run:
+   Run (outside of ontainer):
 
    ```bash
-   kill.bash
+   kill_all.bash
    ```
 
    This script stops and removes all containers to keep things clean.
 
 ---
-
-## 🔄 Key Features
-
-- **User Permissions:**
-  - Matches your host’s UID and GID to avoid permission issues with mounted volumes.
-  - Changes the username inside the container to your **project name** for better prompt visibility.
-
-- **ROS Dependency Management:**
-  - Runs `rosdep` inside the container to install required packages.
-  - Ensures a clean and isolated build environment.
-
----
-
-## 🛑 Troubleshooting
-
-- **Issue:** `rosdep init` fails due to existing files.
-- **Solution:** The Dockerfile handles this by deleting existing sources before re-initializing `rosdep`.
-
-- **Issue:** Permission denied errors.
-- **Solution:** Ensure you sourced `setup.bash` correctly to export UID and GID.
-
----
-
-## 🚀 Future Improvements
-
-- Automate submodule updates on build.
-- Enhance error handling in build scripts.
-
----
-
-## 🏷️ License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Happy ROS Development! 🎉
