@@ -68,7 +68,7 @@ COPY --chown=$PROJECT_UID:$PROJECT_GID . /home/$PROJECT_USER/$PROJECT_NAME
 RUN rosdep install --from-paths src --ignore-src -r -y
 
 
-RUN  /bin/bash -c "source /opt/ros/${ROS_DISTRIBUTION}/setup.bash && colcon build --symlink-install" 
+RUN  /bin/bash -c "source /opt/ros/${ROS_DISTRIBUTION}/setup.bash && rm -rf build log && colcon build --symlink-install --cmake-clean-cache" 
 # Source the workspace by default for the new user
 RUN echo "source /opt/ros/${ROS_DISTRIBUTION}/setup.bash" >> /home/$PROJECT_USER/.bashrc
 RUN echo "source /home/$PROJECT_USER/$PROJECT_NAME/install/setup.bash" >> /home/$PROJECT_USER/.bashrc
