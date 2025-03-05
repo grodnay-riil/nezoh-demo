@@ -1,7 +1,7 @@
 
 # Zeno-Demo ROS Project
 
-This repository contains a ros2 zeno bridge demo. Two isolated containerds with ros two are set up. Between them a Zenoh bridge forwardes a topic with 1Hz pacing. The set up is a generic and flexible setup for working with ROS projects using Docker. It ensures that all builds and executions happen inside containers with user permissions matched to your host system. The setup includes scripts for building, running, and interacting with containers seamlessly. (Running - tobe completed, see the Nimbro-demo, Also, the base container include user 1000:1000 so this step is skipped)
+This repository contains a ros2 zeno bridge demo. Two isolated containers with ros two are set up. Between them a Zenoh bridge forwards a topic with 1Hz pacing. The set up is a generic and flexible setup for working with ROS projects using Docker. It ensures that all builds and executions happen inside containers with user permissions matched to your host system. The setup includes scripts for building, running, and interacting with containers seamlessly. (Running - to be completed, see the Nimbro-demo, Also, the base container include user 1000:1000 so this step is skipped)
 
 ---
 
@@ -81,7 +81,7 @@ This repository contains a ros2 zeno bridge demo. Two isolated containerds with 
    This:
       - Launches the publisher container.
       - launches the publisher
-   You should see the pulisher log sending 10 messages per second
+   You should see the publisher log sending 10 messages per second
    4. **Run subscriber**
 Open another window, run:
    ```bash
@@ -106,20 +106,20 @@ Open another window, run:
    zenoh-bridge-ros2dds -c zenoh_sub.config.json5
    ```
    This:
-      - runs Zenoh bridge with relevent configuration in subscriber and publisher containers
+      - runs Zenoh bridge with relevant configuration in subscriber and publisher containers
       - as we user "run" with docker compose our containers have temporary names.
-      - You shoud see the subscriber accept 1 message per second.
+      - You should see the subscriber accept 1 message per second.
 
 5. Play around:
-   - by changin the Zenoh config files and reluanching Zenoh.
-   - You can check trouhput by connecting to one of the subscriber or publisher containers  anr runnig:
+   - by changin the Zenoh config files and relaunching Zenoh.
+   - You can check throughput by connecting to one of the subscriber or publisher containers  anr running:
    ```bash
    nload
    ```
 
 6. **Stop All Containers with `kill_all.bash`:**
 
-   Run (outside of ontainer):
+   Run (outside of container):
 
    ```bash
    kill_all.bash
