@@ -8,4 +8,4 @@ fi
 
 echo "Building all Docker containers for project at $PROJECT_DIR..."
 cd "$PROJECT_DIR"
-docker compose build #--no-cache
+docker compose build 

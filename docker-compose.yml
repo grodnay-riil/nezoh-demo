@@ -16,6 +16,7 @@ x-common: &common
       PROJECT_USER: ${PROJECT_USER}
       PROJECT_UID: ${PROJECT_UID}
       PROJECT_GID: ${PROJECT_GID}
+      ROS_DISTRIBUTION: ${ROS_DISTRIBUTION}
   user: "${PROJECT_UID}:${PROJECT_GID}"
   environment:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp

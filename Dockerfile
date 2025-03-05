@@ -1,11 +1,16 @@
-# Use the official OSRF ROS2 Jazzy full image as base
-FROM osrf/ros:jazzy-desktop-full
+
+ARG ROS_DISTRIBUTION
+FROM osrf/ros:${ROS_DISTRIBUTION}-desktop-full
+
 # Accept build arguments for user configuration
 ARG PROJECT_NAME
 ARG PROJECT_USER
 ARG PROJECT_UID
 ARG PROJECT_GID
+ARG ROS_DISTRIBUTION
 
+
+RUN echo "*************************${ROS_DISTRIBUTION}*************************"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,12 +34,14 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     nload       
     # && rm -rf /var/lib/apt/lists/*
-RUN apt install -y ros-jazzy-rmw-cyclonedds-cpp
-# # Create a new user and group with matching UID and GID
-# RUN groupadd -g $PROJECT_GID $PROJECT_USER && \
-#     useradd -m -u $PROJECT_UID -g $PROJECT_GID -s /bin/bash $PROJECT_USER && \
-#     usermod -aG sudo $PROJECT_USER
-# RUN ip l set lo multicast on
+
+RUN apt install -y ros-${ROS_DISTRIBUTION}-rmw-cyclonedds-cpp
+ # Create a new user and group with matching UID and GID
+RUN id -u $PROJECT_USER 2>/dev/null || \
+    (groupadd -g $PROJECT_GID $PROJECT_USER && \
+    useradd -m -u $PROJECT_UID -g $PROJECT_GID -s /bin/bash $PROJECT_USER && \
+    usermod -aG sudo $PROJECT_USER)
+#RUN ip l set lo multicast on
 # Allow the new user to use sudo without a password
 RUN echo "$PROJECT_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
@@ -61,8 +68,9 @@ COPY --chown=$PROJECT_UID:$PROJECT_GID . /home/$PROJECT_USER/$PROJECT_NAME
 RUN rosdep install --from-paths src --ignore-src -r -y
 
 
+RUN  /bin/bash -c "source /opt/ros/${ROS_DISTRIBUTION}/setup.bash && colcon build --symlink-install" 
 # Source the workspace by default for the new user
-RUN echo "source /opt/ros/jazzy/setup.bash" >> /home/$PROJECT_USER/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRIBUTION}/setup.bash" >> /home/$PROJECT_USER/.bashrc
 RUN echo "source /home/$PROJECT_USER/$PROJECT_NAME/install/setup.bash" >> /home/$PROJECT_USER/.bashrc
 
 

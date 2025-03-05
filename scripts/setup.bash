@@ -20,9 +20,12 @@ export PROJECT_GID=$(id -g)
 # Add the scripts directory to the PATH
 export PATH="$SCRIPT_DIR:$PATH"
 
+export ROS_DISTRIBUTION=humble #options are humble, jazzy,  
+
 # Print confirmation
 echo "PROJECT_NAME: $PROJECT_NAME"
 echo "PROJECT_USER: $PROJECT_USER"
 echo "PROJECT_DIR: $PROJECT_DIR"
 echo "UID: $PROJECT_UID, GID: $PROJECT_GID"
 echo "Scripts directory added to PATH: $SCRIPT_DIR"
+echo "ROS_DISTRIBUTION: $ROS_DISTRIBUTION"
