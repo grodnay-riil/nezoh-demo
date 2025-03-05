@@ -34,7 +34,7 @@
       //// ros_localhost_only: If set to true, the DDS discovery and traffic will occur only on the localhost interface (127.0.0.1).
       ////                     By default set to false, unless the "ROS_LOCALHOST_ONLY=1" environment variable is defined.
       ////
-      // ros_localhost_only: true,
+      ros_localhost_only: true,
 
       ////
       //// ros_automatic_discovery_range: controls how far ROS nodes will try to discover each other.
@@ -47,7 +47,7 @@
       ////                                Note that this is only available with ROS 2 Iron and later version
       ////                                For more information: https://docs.ros.org/en/rolling/Tutorials/Advanced/Improved-Dynamic-Discovery.html
       ////
-      // ros_automatic_discovery_range: "SUBNET",
+      ros_automatic_discovery_range: "LOCALHOST",
 
       ////
       //// ros_static_peers: is a semicolon (;) separated list of addresses that ROS should try to discover nodes on.
@@ -82,14 +82,14 @@
       //   action_servers: [".*/rotate_absolute"],
       //   action_clients: [],
       // },
-      deny: {
+      // deny: {
       //   publishers: ["/rosout", "/parameter_events"],
       //     subscribers: ["/large_topic"],
       //   service_servers: [".*/set_parameters"],
       //   service_clients: [".*/set_parameters"],
       //   action_servers: [],
       //   action_clients: [],
-      },
+      // },
 
       ////
       //// pub_max_frequencies: Specify a list of maximum frequency of publications routing over zenoh for a set of Publishers.
@@ -204,7 +204,7 @@
   ////
   //// mode: The bridge's mode (router, peer or client)
   ////
-  //mode: "router",
+  mode: "peer",
 
   ////
   //// Which endpoints to connect to. E.g. tcp/localhost:7447.

@@ -34,9 +34,9 @@ This repository contains a ros2 zeno bridge demo. Two isolated containers with r
    **You should see output like:**
 
    ```
-   PROJECT_NAME: nimbro-demo
-   PROJECT_USER: nimbro-demo
-   PROJECT_DIR: /path/to/nimbro-demo
+   PROJECT_NAME: Zenoh-demo
+   PROJECT_USER: Zenoh-demo
+   PROJECT_DIR: /path/to/Zenoh-demo
    UID: 1000, GID: 1000
    ```
 

@@ -40,8 +40,8 @@ tmux bind-key x run-shell "$PROJECT_DIR/scripts/kill_all.bash"
 
 tmux send-keys "docker compose attach ros_publisher" C-m
 tmux split "docker compose attach ros_subscriber" 
-tmux split "docker compose exec -it ros_publisher /bin/bash"
-tmux split "docker compose exec -it ros_subscriber /bin/bash"
+tmux split "docker compose exec -it ros_publisher bash"
+tmux split "docker compose exec -it ros_subscriber bash"
 tmux select-layout  tiled  # Arrange panes neatly
 
 # Enable mouse mode for easy switching
