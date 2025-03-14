@@ -1,6 +1,6 @@
 
-ARG ROS_DISTRIBUTION
-FROM osrf/ros:${ROS_DISTRIBUTION}-desktop-full
+ARG ROS_DISTRIBUTION=dummy
+FROM ros:${ROS_DISTRIBUTION}
 
 # Accept build arguments for user configuration
 ARG PROJECT_NAME
@@ -9,11 +9,11 @@ ARG PROJECT_UID
 ARG PROJECT_GID
 ARG ROS_DISTRIBUTION
 
-ENV PROJECT_NAME
-ENV PROJECT_USER
-ENV PROJECT_UID
-ENV PROJECT_GID
-ENV ROS_DISTRIBUTION
+ENV PROJECT_NAME=${PROJECT_NAME} \
+    PROJECT_USER=${PROJECT_USER} \
+    PROJECT_UID=${PROJECT_UID} \
+    PROJECT_GID=${PROJECT_GID} \
+    ROS_DISTRIBUTION=${ROS_DISTRIBUTION}    
 
 RUN echo "*************************${ROS_DISTRIBUTION}*************************"
 
@@ -80,6 +80,6 @@ RUN echo "source /home/$PROJECT_USER/$PROJECT_NAME/install/setup.bash" >> /home/
 
 
 # Expose ROS 2 and Zenoh ports
-EXPOSE 7447 7448 1883
+#EXPOSE 7447 7448 1883
 # Start with a bash terminal
 CMD ["bash"]

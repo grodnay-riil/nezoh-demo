@@ -15,7 +15,7 @@ SESSION_NAME=$(basename "$PROJECT_DIR")
 # Stop and remove all containers for the project
 echo "🛑 Stopping and removing all containers for project $SESSION_NAME..."
 # docker compose down --volumes --remove-orphans
-docker compoose kill
+docker compose down --volumes --remove-orphans
 # Check if the tmux session exists and kill it if it does
 tmux has-session -t "$SESSION_NAME" 2>/dev/null
 if [ $? -eq 0 ]; then

@@ -19,12 +19,15 @@ x-common: &common
       ROS_DISTRIBUTION: ${ROS_DISTRIBUTION}
   user: "${PROJECT_UID}:${PROJECT_GID}"
   environment:
+      - ROS_LOCALHOST_ONLY=1
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - CYCLONEDDS_URI=file:////home/${PROJECT_USER}/${PROJECT_NAME}/cyclonedds.xml
       - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
       - PROJECT_NAME
       - ROS_DISTRIBUTION
       - PROJECT_USER
+      - PROJECT_UID
+      - PROJECT_GID
   volumes:
     - .:/home/${PROJECT_USER}/${PROJECT_NAME}
     - .vscode:/home/${PROJECT_USER}/.vscode-server  
